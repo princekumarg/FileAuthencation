@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const SECRET = "This is our secret";
+// const SECRET = "This is our secret";
 const User = require("../models/userModel");
 const isAuthenticated = async (req, res, next) => {
   try {
@@ -11,15 +11,15 @@ const isAuthenticated = async (req, res, next) => {
       });
     }
 
-    const token = authHeader.split("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0fSwiaWF0IjoxNjkyOTA2MjcwLCJleHAiOjE2OTMyNjYyNzB9.2vuS2JLm-psPgfVJ_uNrxOsDS_iK0Km3Ic5E8VfTfTo")[1]; // This is the bearer token
-
+    const token = authHeader.split(" ")[1]; // This is the bearer token
+    console.log(token)
     if (!token) {
       return res.status(401).json({
         err: "No token, authorization denied",
       });
     }
 
-    const decoded = jwt.verify(token, SECRET);
+    const decoded = jwt.verify(token, "SECRET MESSAGE");
     const user = await User.findOne({ where: { id: decoded.user.id } });
 
     if (!user) {

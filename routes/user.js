@@ -28,12 +28,13 @@ router.post("/signup",async(req,res)=>{
         return res.status(400).json({err:"Password validate failed"});
     }
 //(saltOrRounds=10)is used to make password more secure.
-    const hashedPassword=await bcrypt.hash(password,10);
+    const hashedPassword=await bcrypt.hash(password,(saltOrRounds=10));
     const user={
         name,
         email,
-        password:hashedPassword,
         isSeller:isSeller || false,
+        password:hashedPassword,
+        
     };
     const createdUser=await User.create(user);
     return res.status(201).json({
@@ -45,7 +46,6 @@ router.post("/signup",async(req,res)=>{
     return res.status(500).send(e); 
   }
 });
-
 router.post('/signin',async(req,res)=>{
     try{
         const { email,password }=req.body;
